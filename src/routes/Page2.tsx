@@ -32,6 +32,7 @@ const page2 = () => {
       {categoryData &&
         categoryData.map((category) => (
           <ExpandableChecklist
+            key={category.department}
             main={category.department}
             sub={category.sub_departments}
           />

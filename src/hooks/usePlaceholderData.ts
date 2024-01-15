@@ -19,7 +19,6 @@ const usePlaceholderData = () => {
     axios
       .get<placeholderData[]>("https://jsonplaceholder.typicode.com/posts")
       .then((res) => {
-        console.log(res.data);
         setData(res.data);
       })
       .catch((err: AxiosError) => {
