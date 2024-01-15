@@ -1,17 +1,3 @@
-// import {
-//   Checkbox,
-//   Container,
-//   IconButton,
-//   ListItem,
-//   ListItemButton,
-//   ListItemIcon,
-//   ListItemText,
-// } from "@mui/material";
-// import RemoveIcon from "@mui/icons-material/Remove";
-// import AddIcon from "@mui/icons-material/Add";
-// import { List } from "@mui/icons-material";
-// import { useState } from "react";
-
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -28,6 +14,49 @@ interface Props {
   main: string;
   sub: string[];
 }
+
+const createSubList = (
+  showSubList: boolean,
+  handleSubToggle: (index: number) => () => void,
+  subList: string[],
+  subChecked: number[]
+) => {
+  return (
+    <List
+      sx={{
+        paddingLeft: "130px",
+        width: "100%",
+        maxWidth: 360,
+        bgcolor: "background.paper",
+      }}
+    >
+      {showSubList &&
+        subList.map((value, index) => {
+          const labelId = `checkbox-list-label-${index}`;
+          return (
+            <ListItem key={index} disablePadding>
+              <ListItemButton
+                role={undefined}
+                onClick={handleSubToggle(index)}
+                dense
+              >
+                <ListItemIcon>
+                  <Checkbox
+                    edge="start"
+                    checked={subChecked.indexOf(index) !== -1}
+                    tabIndex={-1}
+                    disableRipple
+                    inputProps={{ "aria-labelledby": labelId }}
+                  />
+                </ListItemIcon>
+                <ListItemText id={labelId} primary={value.toUpperCase()} />
+              </ListItemButton>
+            </ListItem>
+          );
+        })}
+    </List>
+  );
+};
 
 export default function ExpandableChecklist({ main, sub }: Props) {
   const [subChecked, setSubChecked] = useState([0]);
@@ -100,39 +129,7 @@ export default function ExpandableChecklist({ main, sub }: Props) {
         </ListItemButton>
       </ListItem>
 
-      <List
-        sx={{
-          paddingLeft: "130px",
-          width: "100%",
-          maxWidth: 360,
-          bgcolor: "background.paper",
-        }}
-      >
-        {showSubList &&
-          sub.map((value, index) => {
-            const labelId = `checkbox-list-label-${index}`;
-            return (
-              <ListItem key={index} disablePadding>
-                <ListItemButton
-                  role={undefined}
-                  onClick={handleSubToggle(index)}
-                  dense
-                >
-                  <ListItemIcon>
-                    <Checkbox
-                      edge="start"
-                      checked={subChecked.indexOf(index) !== -1}
-                      tabIndex={-1}
-                      disableRipple
-                      inputProps={{ "aria-labelledby": labelId }}
-                    />
-                  </ListItemIcon>
-                  <ListItemText id={labelId} primary={value.toUpperCase()} />
-                </ListItemButton>
-              </ListItem>
-            );
-          })}
-      </List>
+      {createSubList(showSubList, handleSubToggle, sub, subChecked)}
     </List>
   );
 }
